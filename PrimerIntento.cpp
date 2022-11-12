@@ -4,8 +4,8 @@ using namespace std;
 
 void jugada(int jugada[], int n_jugador, int num_jugada);
 
-
-
+void tirarDados(int& valorDado1);
+int tiradaDados[5];
 int main() {
     bool a=1;
     // Este bracket es para que demarque la creacion de la matriz. 
@@ -49,13 +49,45 @@ int main() {
     }
     
     srand(time(NULL));
-int valorDado1, valorDado2, sumad1d2;
-void tirar2Dados(int& valorDado1, int& valorDado2, int& sumad1d2);
-{
-    valorDado1 =  1 + rand() % 6;
-    valorDado2 =  1 + rand() % 6;
-    sumad1d2 = valorDado1 + valorDado2;
-}
+    int valorDado1, valorDado2;
+
+    void tirarDados(int& valorDado1);
+    {
+        int i;
+        
+        for(i=0;i<5;i++)
+        {
+            valorDado1 =  1 + rand() % 6;
+            tiradaDados[i] = valorDado1;
+
+        }
+    }
+
+    int h; 
+    cout << "Mostrando la tirada de dados random" << endl;
+    for(h=0;h<5;h++)
+    {
+        cout << " " << tiradaDados[h] << " ";
+    }
+
+    cout << endl;
+
+    //esto debajo es para probar la funcion jugada, aver si con valores de dados toma el camino correcto
+    // Debo evaluar si las condiciones de los if de eso son correctas antes de sumarlos a la matriz.
+    // Luego me encargare de la funcion para cargarlo en la matriz *Aca es dondedebo aplicar la logica de que el programa seleccione
+    // O debo dar a elegir en cada jugada.
+    // Seran programas muy distintos. 
+    // 
+    int v[5]={0};
+    int i;
+    cout << "Ingrese valores vector" << endl;
+    for(i=0;i<5;i++){
+        cin>> v[i];
+    
+    }
+    jugada(v,1,2);
+
+
 
 
     return 0;
@@ -88,10 +120,10 @@ void jugada(int jugada[], int n_jugador, int num_jugada)
 {
     int a,j;
     int ph;
-    int jugada[5]={0};
+
     for(a=0;a<5;a++)
     {
-        for(j=1;j<=5;j++)
+        for(j=1;j<5;j++)
         {
             if(jugada[j-1] > jugada[j])
             {
@@ -102,14 +134,11 @@ void jugada(int jugada[], int n_jugador, int num_jugada)
 
         }
     }
+    for(j=0;j<5;j++){ cout<< " " << jugada[j] << " ";}
     //Hay tres posibilidades: 1-2-3-4-5 (escalera menor), 2-3-4-5-6 (escalera mayor) o 3-4-5-6-1
     // 65321
     //12356
-    if((jugada[4]>jugada[3]>jugada[2]>jugada[1]>jugada[0]) || ((jugada[0]==1) && (jugada[4]>jugada[3]>jugada[2]>jugada[1])))
-    {
-        cout << "Es escalera" << endl;
-        return;
-    }
+   
     a=0;
     int cont1 = 0;
     int cont2 = 0;
@@ -138,12 +167,17 @@ void jugada(int jugada[], int n_jugador, int num_jugada)
             cout<<"Es poker" << endl;
             return;
         }
-        else
+        /*else // debo de definir mejor esto por que termina aca y nada que ver xd
         {
             cout<<"Es full" << endl;
             return;
         }
-
+         if((jugada[0]<jugada[1]<jugada[2]<jugada[3]<jugada[4]) || ((jugada[0]==1) && (jugada[4]>jugada[3]>jugada[2]>jugada[1])))
+    {
+        cout << "Es escalera" << endl;
+        return;
+    }
+*/
 
 
 
@@ -185,4 +219,11 @@ los resultados y determinar el ganador.
 8. Por último hacer un ranking de los 3 mejores cargando los datos del archivo en una lista ordenada. 
 
 
+
+
+
+
+
+Tengo que hacer la funcion que haga la tirada
+Luego la que la evalue y la cargue. 
 */
