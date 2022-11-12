@@ -3,13 +3,10 @@
 using namespace std;
 
 void jugada(int jugada[], int n_jugador, int num_jugada);
-
-void tirarDados(int& vDado);
+int tirarDados(int& vDado, int& nTirada);
 int tiradaDados[5];
 
-
-
-// MAIN 
+//-------------- -------------- ------- MAIN ------- --------- ------ 
 int main() {
     
 
@@ -35,7 +32,12 @@ int main() {
     // De aqui en adelante deberia decirle a los jugadores,  toma es tu turno. 
     // En tu turno te digo , te quedan 3 tiradas , , Apreta 1 para hacer la tirada
     // luego se muestran los resultados de la tirada
-    // seguido de eso se muestran 
+    // seguido de eso se muestran las posibles combinacinoes que puede hacer con esa tirada. 
+    // aca le pregunto, deseas hacer uso de alguna de estas combinaciones?  o deseas volver a tirar? 
+    // Si elige tirar repito lo anterior hasta que no le queden mas tiradas
+    // si elige hacer uso de las combinaciones, le resto la cantidad de tiradas que le quedaban
+    // y le muestro el menu de nuevo de las que tenia disponibles. 
+    // cuando elija la opcion le sumo los puntos correspondientes  y paso al proximo jugador. 
     
     
 
@@ -44,21 +46,13 @@ int main() {
     // Seed y variable para la funcion rand
     srand(time(NULL));
     int valorDado;
-
-
+    int nTirada= 0;
+    // la nTirada deberia resetearse a 0 cada vez que sea el turno de otro jugador. 
+    // utilizara el valor en esa variable para computar si es servida o no la jugada de escalera, poker, full o generala.
     // tiradaDados es el array modificado que queda para usar en la proxima funcion.
-    tirarDados(valorDado);
+    nTirada = tirarDados(valorDado, nTirada);
 
-   
-
-   
-
-
-
-
-
-
-
+    // debo diseñar aqui el menu.
 
 
 
@@ -109,18 +103,12 @@ int main() {
     cout << "El ganador fue el jugador N° " << posicion << " con " << ganador << " puntos" << endl;
     return 0;
 }
+// ---    ----   ----  ----  ---- FIN DEL MAIN --- ---- ---- ---- ------ ----------
 
 
 
-/*
 
-
-3. Crear una función denominada “int tirar(int juego[])” que SIMULE una tirada de datos de forma aleatoria 
-y retorne como parámetro un vector con los 5 resultados y en el nombre de la función un entero que indique 
-si el resultado obtenido de los datos fue en 1,2 o 3 tiros. 
-*/
-
-void tirarDados(int& vDado)
+int tirarDados(int& vDado , int& nTirada)
     {
         int i;
         for(i=0;i<5;i++)
@@ -135,6 +123,7 @@ void tirarDados(int& vDado)
             cout << " " << tiradaDados[h] << " ";
         }
     cout << endl;
+    return nTirada+1;
     }
 
 
@@ -143,7 +132,10 @@ void tirarDados(int& vDado)
 
 4. Crear una función denominada “jugar” que evalúe el resultado de acuerdo a la jugada realizada (tirar), 
 del jugador que corresponda y cargue la matriz. \ 
-Jugar deberá evaluar los juegos (escalera,full,poker,generala) para asignar puntos y 
+Jugar deberá evaluar los juegos (escalera,full,poker,generala) para asignar puntos 
+
+
+y 
 de no haber juegos aplicar lógica para seleccionar el valor de los números, 
 por ejemplo si son todos distintos tomar el menor y 
 si hay dos  iguales anotar la suma siempre que la casilla no haya sido ocupada con algún resultado previo 
@@ -155,8 +147,8 @@ si hay dos  iguales anotar la suma siempre que la casilla no haya sido ocupada c
 void jugada(int jugada[], int n_jugador, int num_jugada)
 {
     int a,j;
-    int ph;
-
+    int ph,puntos;
+    // El siguiente ciclo ordena la jugada de menor a mayor
     for(a=0;a<5;a++)
     {
         for(j=1;j<5;j++)
@@ -170,56 +162,110 @@ void jugada(int jugada[], int n_jugador, int num_jugada)
 
         }
     }
-    for(j=0;j<5;j++){ cout<< " " << jugada[j] << " ";}
-    //Hay tres posibilidades: 1-2-3-4-5 (escalera menor), 2-3-4-5-6 (escalera mayor) o 3-4-5-6-1
-    // 65321
-    //12356
-   
-    a=0;
-    int cont1 = 0;
-    int cont2 = 0;
-    if(jugada[a] == jugada[a+1]== jugada[a+2] == jugada[a+3]== jugada[a+4])
+    
+    // podria setear tantas variables como categorias, y en el caso en qeu se cumpla la condiciones sumarle los puntos.
+   // si no van a tener un menos uno, y directamente se lo asigno a esa categoria. 
+   // eso para cerrar la categoria
+   // le voy a poner el -1 de comienzo, y sumarle uno luego para tomarlo en cuenta. 
+   // de esa forma voy a tener una forma de saber si esta cerrado. 
+   // no para
+   // tengo que decidir como voy a decidir si lo puedo sumar a la matriz. 
+   // al momento
+    
+    int uno=0, dos=0, tres=0, cuatro=0, cinco=0, seis=0;
+    for(a=0;a<5;a++)
     {
-        cout << "Generala! " << endl;
-        if(num_jugada==1) {
-
-        cout << " y servida!" << endl;
-        cout << "Jugador " << n_jugador << " gana el juego! " << endl;
-        return ;
-        }
+        if(jugada[a]==1){uno++;}
+        if(jugada[a]==2){dos++;}
+        if(jugada[a]==3){tres++;}
+        if(jugada[a]==4){cuatro++;}
+        if(jugada[a]==5){cinco++;}
+        if(jugada[a]==6){seis++;}
     }
-    else
+    cout << "Puedes anotar " << uno << "al 1 " << endl;
+    cout << "Puedes anotar " << dos << "al 2" << endl;
+    cout << "Puedes anotar " << tres << "al 3 " << endl;
+    cout << "Puedes anotar " << cuatro << "al 4 " << endl;
+    cout << "Puedes anotar " << cinco << "al 5 " << endl;
+    cout << "Puedes anotar " << seis << "al 6 " << endl;
+    //generala - me falta agregar la posibilidad de generala doble. * TAMB ME FALTA AGREGAR QUE AGREGUE LOS PUNTOS A LA MATRIZ 
+    // Y me falta la logica de que decida a donde anotar. 
+    if(jugada[0] == jugada[1]== jugada[2] == jugada[3]== jugada[4])
     {
-        for(a=1;a<5;a++)
+        cout << "Generala!";
+        
+        if(num_jugada==1)
         {
-            if(jugada[a] == jugada[a-1]) {cont1++;}
-        }   
-        //1,2222 poker 3
-        //1111,2 poker 3
-        //111,22 full 3 
-        //11,222 full 3
-        if((cont1=3) && ((jugada[0]== jugada[3]) || (jugada[1]==jugada[4])))
-        {
-            cout<<"Es poker" << endl;
+            cout << " y servida!" << endl;
+            cout << "Jugador N° " << n_jugador << " gana el juego! " << endl;
+            puntos = 10000;
             return;
         }
-        /*else // debo de definir mejor esto por que termina aca y nada que ver xd
-        {
-            cout<<"Es full" << endl;
-            return;
-        }
-         if((jugada[0]<jugada[1]<jugada[2]<jugada[3]<jugada[4]) || ((jugada[0]==1) && (jugada[4]>jugada[3]>jugada[2]>jugada[1])))
-    {
-        cout << "Es escalera" << endl;
+        cout << " son 100 puntos" << endl;
+        puntos = 100;
         return;
     }
-*/
-
-
-
+    // escalera
+    else if(((jugada[0]==1)&(jugada[1]==2)&(jugada[2]==3)&(jugada[3]==4)&(jugada[4]==5)) ||((jugada[0]==2)&(jugada[1]==3)&(jugada[2]==4)&(jugada[3]==5)&(jugada[4]==6)) ||((jugada[0]==1)&(jugada[1]==3)&(jugada[2]==4)&(jugada[3]==5)&(jugada[4]==6)))
+    {   
+        cout << "Es escalera ";
+        if(num_jugada==1)
+        {
+            cout << " y servida! son 25 puntos" << endl;
+            puntos = 25;
+            return;
+        }
+        else
+        {
+            cout << " son 20 puntos " << endl;
+            puntos = 20;
+            return;
+        }
+    }
+    // poker, solo si 1,2222 o , 1111,2
+    else if((jugada[0]==jugada[3])|| (jugada[1]==jugada[4]))
+    {
+        cout << "Es poker ";
+        if(num_jugada==1)
+        {
+            cout << " y servido! son 45 puntos" << endl;
+            puntos = 45;
+            return;
+        }
+        else
+        {
+            cout << " son 40 puntos " << endl;
+            puntos = 40;
+            return;
+        }
+        }
+    //full, solo si 111,22 o , 11,222
+    else if((jugada[0]==jugada[2])|| (jugada[2]==jugada[4]))
+    {
+        cout << "Es full ";
+        if(num_jugada==1)
+        {
+            cout << " y servido! son 35 puntos" << endl;
+            puntos = 35;
+            return;
+        }
+        else
+        {
+            cout << " son 30 puntos " << endl;
+            puntos = 30;
+            return;
+        }
     }
 
+    
+    
+    
+
+
 }
+
+
+
 
 
 
