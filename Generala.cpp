@@ -6,10 +6,6 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12]);
 int tirarDados(int& vDado, int& nTirada);
 int tiradaDados[5];
 
-
-// es el num de jugada que se incrementa y no se por que o donde
-
-//-------------- -------------- ------- MAIN ------- --------- ------ 
 int main() {
 
     cout << "Bienvenido al juego de la Generala" << endl << endl;
@@ -31,41 +27,34 @@ int main() {
         }
         if(i>0){tabla[i][0] = i;}
     }
-    // De aqui en adelante deberia decirle a los jugadores,  toma es tu turno. 
-    // En tu turno te digo , te quedan 3 tiradas , , Apreta 1 para hacer la tirada
-    // luego se muestran los resultados de la tirada
-    // seguido de eso se muestran las posibles combinacinoes que puede hacer con esa tirada. 
-    // aca le pregunto, deseas hacer uso de alguna de estas combinaciones?  o deseas volver a tirar? 
-    // Si elige tirar repito lo anterior hasta que no le queden mas tiradas
-    // si elige hacer uso de las combinaciones, le resto la cantidad de tiradas que le quedaban
-    // y le muestro el menu de nuevo de las que tenia disponibles. 
-    // cuando elija la opcion le sumo los puntos correspondientes  y paso al proximo jugador. 
-    
-    
-
-
-
     // Seed y variable para la funcion rand
     srand(time(NULL));
     int valorDado;
     int nTirada= 0;
-    // la nTirada deberia resetearse a 0 cada vez que sea el turno de otro jugador. 
-    // utilizara el valor en esa variable para computar si es servida o no la jugada de escalera, poker, full o generala.
-    // tiradaDados es el array modificado que queda para usar en la proxima funcion.
    
-   
-   for(i=0;i<11;i++){
 
-   // tengo que ver como cambiar de jugador
-   // creo que eso se va a resolver cuando haga el menu. 
-    nTirada = tirarDados(valorDado, nTirada);
-    jugada(tiradaDados,1,1, tabla);
+    int k;
+    for(k=0;k<11;k++)
+    {
+        for(i=1;i<=n-1;i++)
+        {
+        nTirada=0;
+        cout << "Turno del jugador N° " << i << endl;
+        for(j=1;j<=3;j++)
+        {
+        nTirada = tirarDados(valorDado, nTirada);
+        jugada(tiradaDados,i,nTirada, tabla);
+        }
 
+        if(tabla[i][11]>1000){break;}
+        }
+        if(tabla[i][11]>1000){break;}
+    }
 
-    cout << endl;
-   }
+    // El siguiente ciclo muestra la tabla.  
 
-    // El siguiente ciclo muestra la tabla. 
+    cout <<endl;
+    cout << "La tabla de resultados es la siguiente " << endl;
     for(i=0;i<n;i++)
     {
         for(j=0;j<12;j++)
@@ -102,17 +91,8 @@ int main() {
     cout << "El ganador fue el jugador N° " << posicion << " con " << ganador << " puntos" << endl;
 
 
-    
-
-
-
     return 0;
 }
-// ---    ----   ----  ----  ---- FIN DEL MAIN --- ---- ---- ---- ------ ----------
-
-
-
-
 
 int tirarDados(int& vDado , int& nTirada)
     {
@@ -148,12 +128,7 @@ int tirarDados(int& vDado , int& nTirada)
     return nTirada+1;
     }
 
-
-
-
-
 // matriz[n_jugador][categoria] = -1; para tachar la categoria
-
 
 void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
 {
@@ -187,14 +162,14 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
         if(jugada[a]==5){cinco++;}
         if(jugada[a]==6){seis++;}
     }
-    // Y me falta la logica de que decida a donde anotar. 
     int flag=0;
+    // Generala, servida, simple y doble
     if(jugada[0] == jugada[1]== jugada[2] == jugada[3]== jugada[4])
     {
         cout << "Generala!";
         flag++;
         if(num_jugada==1)
-        { // que despues de cada jugada el programa chequee si el score del ultimo punto de ese jugador es igual a 10000 y si lo es salir del juego.
+        { 
             cout << " y servida!" << endl;
             cout << "Jugador N° " << n_jugador << " gana el juego! " << endl;
             matriz[n_jugador][11]=10000;
@@ -203,10 +178,8 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
         if((matriz[n_jugador][10]>0) && (matriz[n_jugador][11]==0))
         {
             cout<< "Doble generala, son 100 puntos" << endl;
-            
             matriz[n_jugador][11] = 100;
             return;
-
         }
         cout << " son 50 puntos" << endl;
         if(matriz[n_jugador][10] == 0) {matriz[n_jugador][10]=50;}
@@ -233,7 +206,7 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
             }
         }
     }
-    // poker, solo si 1,2222 o , 1111,2
+    // poker, solo si x,yyyy o , xxxx,y
     else if((jugada[0]==jugada[3])|| (jugada[1]==jugada[4]))
     {
         cout << "Es poker ";
@@ -254,7 +227,7 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
             }
         }
         }
-    //full, solo si 111,22 o , 11,222
+    //full, solo si xxx,yy o , xx,yyy
     else if(((jugada[0]==jugada[1]==jugada[2]) && (jugada[3]==jugada[4]))|| ((jugada[0]==jugada[1]) && (jugada[2]==jugada[3]==jugada[4])))
     {
         cout << "Es full ";
@@ -275,12 +248,10 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
             }
         }
     }
-    cout << "El flag dio " << flag << endl;
-    cout << "La jugada es la nro " << num_jugada << endl;
-
-    if((flag==0) && (num_jugada<=3))
+    // Logica de tachado y anotado de categorias numericas
+    if((flag==0) && (num_jugada==3))
     {
-        cout << "Usted no obtuvo categorias especiales" << endl;
+
         if(matriz[n_jugador][1]==0)
         {
             if(uno==0)
@@ -405,9 +376,10 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
             
         }
     }
-
+    // Mensaje si salio categoria especial
     else if(flag==1)
     {
+        num_jugada=3;
         cout << "Usted consiguio una categoria especial, se le anoto para su comodidad" << endl;
         return;
 
@@ -418,32 +390,7 @@ void jugada(int jugada[], int n_jugador, int num_jugada, int matriz[][12])
 
 
 
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Me queda pendiente la ultima parte
 
 /*
 
